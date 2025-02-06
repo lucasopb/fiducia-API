@@ -1,6 +1,6 @@
 import { query } from './database';
 
-const createTable = async () => {
+export const createTable = async () => {
   await query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
@@ -13,4 +13,4 @@ const createTable = async () => {
   console.log('✅ Tabela de usuários criada!');
 };
 
-createTable();
+createTable()
