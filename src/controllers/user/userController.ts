@@ -29,8 +29,9 @@ export const editUsersController = async (req: Request, res: Response) => {
   const {name, email, password} = req.body
   try {
     const result = await editUser(name, email, password, id);
-    if (result) {
+    if (!result) {
       res.status(404).json({ error: 'Usuário não encontrado' });
+      return;
     }
     res.status(200).json(result);
   } catch (error) {
@@ -43,8 +44,9 @@ export const deleteUserController = async (req: Request, res: Response) => {
   const { id } = req.params;  
   try {
     const result = await deleteUser(id)
-    if (result) {
-      res.status(404).json({ error: 'Usuário não encontrado' });
+    if (!result) {
+      res.status(404).json({ error: 'Usuário não encontrado' })
+      return;
     }
     res.status(200).json({ message: 'Usuário deletado com sucesso' });
   } catch (error) {
