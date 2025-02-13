@@ -1,8 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
-import { pool } from './config/database';
-import {createTable} from './config/initDB' // 🔹 Importe a conexão com o banco
+import { pool } from './database/database';
 
 dotenv.config();
 

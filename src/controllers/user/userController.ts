@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
-import {CreateUsers, getUsers, editUser, deleteUser} from '../../models/userModels';
+import {CreateUsers, getUsers, editUser, deleteUser} from '../../repositories/userRepository';
+import { CreateUserSchema } from '../../dtos/createUserDTO';
 
 
 
 export const createUserController = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;  
   try {
-    const result = await CreateUsers(name, email, password)
+    const validatedData = CreateUserSchema.parse(req.body)
+    const result = await CreateUsers(validatedData)
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

@@ -1,0 +1,7 @@
+CREATE TABLE priests (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    church_id INTEGER REFERENCES churches(id) ON DELETE SET NULL,
+    bio TEXT,
+    available BOOLEAN DEFAULT TRUE
+);
