@@ -1,14 +1,29 @@
 import { Request, Response } from 'express';
 import {CreateUsers, getUsers, editUser, deleteUser} from '../../repositories/userRepository';
+import { CreatePriest } from '../../repositories/priestRepository';
 import { CreateUserSchema } from '../../dtos/createUserDTO';
+
 
 
 
 export const createUserController = async (req: Request, res: Response) => {
   try {
-    const validatedData = CreateUserSchema.parse(req.body)
-    const result = await CreateUsers(validatedData)
-    res.status(201).json(result);
+    const validatedData = CreateUserSchema.parse(req.body);
+    const user = await CreateUsers(validatedData);
+    if (!validatedData.bio) {
+      
+    }
+    // Se o usuário for um padre, criar registro na tabela `priests`
+    if (validatedData.role === 'padre') {
+      const priestData = {
+        user_id: user.id,
+        church_id: validatedData.church_name || null, //validar nome
+        bio: validatedData.bio ?? "",
+      };
+      await CreatePriest(priestData);
+    }
+
+    res.status(201).json(user);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erro ao criar usuário' });
