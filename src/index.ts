@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
 import chuchRoutes from './routes/churchRoutes';
 import { pool } from './database/database';
+import { errorHandler } from "./middlewares/errorHandlerMiddleware";
+
 
 dotenv.config();
 
@@ -15,6 +17,8 @@ app.use('/churches', chuchRoutes)
 app.get('/', (req, res) => {
   res.send('API funcionando!');
 });
+
+app.use(errorHandler)
 
 // Testar a conexão antes de iniciar o servidor
 pool
@@ -29,4 +33,4 @@ pool
   .catch((err) => {
     console.error('❌ Erro ao conectar ao banco de dados:', err);
     process.exit(1); // Encerra o processo em caso de erro
-  });
+});

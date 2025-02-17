@@ -3,27 +3,37 @@ import {CreateUsers, getUsers, editUser, deleteUser} from '../../repositories/us
 import { createPriest } from '../../repositories/priestRepository';
 import { CreateUserSchema } from '../../dtos/createUserDTO';
 
-
-
-
 export const createUserController = async (req: Request, res: Response) => {
   try {
-    const validatedData = CreateUserSchema.parse(req.body);
-    const user = await CreateUsers(validatedData);
-    // Se o usuário for um padre, criar registro na tabela `priests`
-    if (validatedData.role === 'padre') {
-      const priestData = {
-        user_id: user.id,
-        church_id: validatedData.church_name || null, //validar nome
-        bio: validatedData.bio ?? "",
-      };
-      await createPriest(priestData);
-    }
-
-    res.status(201).json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erro ao criar usuário' });
+      const parsedData = CreateUserSchema.safeParse(req.body);
+      if (!parsedData.success) {
+          return res.status(400).json({
+              success: false,
+              message: "Erro de validação",
+              errors: parsedData.error.format(),
+          });
+      }
+      const validatedData = parsedData.data;
+      const user = await CreateUsers(validatedData);
+      if (validatedData.role === "padre") {
+          const priestData = {
+              user_id: user.id,
+              church_id: validatedData.church_name || null,
+              bio: validatedData.bio ?? "",
+          };
+          await createPriest(priestData);
+      }
+      return res.status(201).json({
+          success: true,
+          message: "Usuário criado com sucesso",
+          user,
+      });
+  } catch (err) {
+      console.error("[ERROR] createUserController:", err);
+      return res.status(500).json({
+          success: false,
+          message: "Erro interno ao criar usuário"
+      });
   }
 };
 

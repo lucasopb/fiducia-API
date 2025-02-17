@@ -3,12 +3,17 @@ import { CreateUserDTO } from "../dtos/createUserDTO"
 
 
 export const CreateUsers = async (user: CreateUserDTO) => {
-  const result = await query(
-    'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *',
-    [user.name, user.email, user.password, user.role]
-  );
-  return result.rows[0]
-}
+  try {
+      const result = await query(
+          "INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *",
+          [user.name, user.email, user.password, user.role]
+      );
+      return result.rows[0];
+  } catch (error: any) {
+      console.error("[ERROR] Falha ao criar usuário:", error);
+      throw error; 
+  }
+};
 
 export const getUsers = async () => {
   const result = await query('SELECT * FROM users');
