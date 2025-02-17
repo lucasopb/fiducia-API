@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import {CreateUsers, getUsers, editUser, deleteUser} from '../../repositories/userRepository';
-import { CreatePriest } from '../../repositories/priestRepository';
+import { createPriest } from '../../repositories/priestRepository';
 import { CreateUserSchema } from '../../dtos/createUserDTO';
 
 
@@ -10,9 +10,6 @@ export const createUserController = async (req: Request, res: Response) => {
   try {
     const validatedData = CreateUserSchema.parse(req.body);
     const user = await CreateUsers(validatedData);
-    if (!validatedData.bio) {
-      
-    }
     // Se o usuário for um padre, criar registro na tabela `priests`
     if (validatedData.role === 'padre') {
       const priestData = {
@@ -20,7 +17,7 @@ export const createUserController = async (req: Request, res: Response) => {
         church_id: validatedData.church_name || null, //validar nome
         bio: validatedData.bio ?? "",
       };
-      await CreatePriest(priestData);
+      await createPriest(priestData);
     }
 
     res.status(201).json(user);

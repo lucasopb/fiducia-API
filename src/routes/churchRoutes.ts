@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { createUserController } from '../controllers/church/churchController';
+import { createChurchController } from '../controllers/church/churchController';
 
 
-const chuchRouter = Router();
+const chuchRoutes = Router();
 
-chuchRouter.post('/', createUserController);    
+chuchRoutes.post('/', createChurchController);    
 
-export default chuchRouter;
+export default chuchRoutes;

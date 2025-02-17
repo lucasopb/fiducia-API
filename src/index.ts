@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
+import chuchRoutes from './routes/churchRoutes';
 import { pool } from './database/database';
 
 dotenv.config();
@@ -9,7 +10,7 @@ const app = express();
 
 app.use(express.json());
 app.use('/users', userRoutes);
-app.use('/churchs', chuchRouter)
+app.use('/churches', chuchRoutes)
 
 app.get('/', (req, res) => {
   res.send('API funcionando!');
