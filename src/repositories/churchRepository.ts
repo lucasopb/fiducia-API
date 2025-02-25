@@ -1,13 +1,12 @@
 import { query } from '../database/database';
-import { CreateChurchDTO } from "../dtos/createChurchDTO";
 
 
-export const createChurch = async (church: CreateChurchDTO) => {
+export const createChurch = async (name:string, email:string, password: string, address: string, phone: string) => {
     const result = await query(
         `INSERT INTO churches (name, email, password, address, phone)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING *;`,
-        [church.name, church.email, church.password, church.address, church.phone]
+        [name, email, password, address, phone]
     )
     return result.rows[0]
 }

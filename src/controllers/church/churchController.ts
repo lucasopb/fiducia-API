@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { CreateChurchSchema } from "../../dtos/createChurchDTO"
 import { createChurch } from "../../repositories/churchRepository"
+import { BadRequestError } from '../../helpers/api-erros';
+
 
 export const createChurchController = async (req: Request, res: Response) => {
-    try {
-        const validatedData = CreateChurchSchema.parse(req.body);
-        const church = await createChurch(validatedData);
-        res.status(201).json(church);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({error: 'erro ao criar igreja'});
+    const {name, email, password, address, phone} = req.body
+    if (!name || !email || !password || !address || !phone) {
+        throw new BadRequestError("nome, email, senha, endereço e telefone devem ser fornecidos")
     }
+    const church = await createChurch(name, email, password, address, phone);
+    res.status(201).json(church);
 }
+
