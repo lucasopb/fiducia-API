@@ -31,6 +31,7 @@ export const login = async (req: Request, res: Response) => {
   if (!email || !password) {
     throw new BadRequestError("Email e senha são necessarios")
   }  
+  
 }
 
 export const getUsersController = async (req: Request, res: Response) => {

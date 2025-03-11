@@ -1,3 +1,4 @@
+import { number } from 'zod';
 import { query } from '../database/database';
 import { ConflictError } from '../helpers/api-erros';
 
@@ -43,3 +44,4 @@ export const deleteUser = async (id: string) => {
   );
   return result.rows[0]
 }
+
